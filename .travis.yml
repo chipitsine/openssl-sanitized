@@ -6,7 +6,7 @@ os: linux
 language: c
 
 compiler:
-  - gcc
+  - clang
 
 env:
   global:
@@ -29,3 +29,7 @@ script:
   - ./config shared --prefix="${PREFIX}" --openssldir="${PREFIX}" -DPURIFY
   - make all install_sw
   - cd ..
+  - export CFLAGS="-ggdb -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer" LDFLAGS="-fsanitize=memory -fPIE -pie -fno-omit-frame-pointer"
+  - clang test.c
+  - ./a.out
+
