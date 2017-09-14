@@ -1,0 +1,31 @@
+sudo: required
+dist: trusty
+
+os: linux
+
+language: c
+
+compiler:
+  - gcc
+
+env:
+  global:
+    - PREFIX="${HOME}/opt"
+    - OPENSSL_VERSION="1.0.2l"
+    - OPENSSL_CFLAGS="-I${PREFIX}/include"
+    - OPENSSL_LIBS="-L${PREFIX}/lib -lssl -lcrypto"
+
+addons:
+  apt:
+    packages:
+      - libpam0g-dev
+      - linux-libc-dev
+      - man2html
+
+script:
+  - wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz
+  - tar zxf openssl-${OPENSSL_VERSION}.tar.gz
+  - cd openssl-${OPENSSL_VERSION}
+  - ./config shared --prefix="${PREFIX}" --openssldir="${PREFIX}" -DPURIFY
+  - make all install_sw
+  - cd ..
