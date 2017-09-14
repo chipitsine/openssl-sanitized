@@ -12,8 +12,6 @@ env:
   global:
     - PREFIX="${HOME}/opt"
     - OPENSSL_VERSION="1.0.2l"
-    - OPENSSL_CFLAGS="-I${PREFIX}/include"
-    - OPENSSL_LIBS="-L${PREFIX}/lib -lssl -lcrypto"
 
 addons:
   apt:
@@ -30,6 +28,6 @@ script:
   - make all install_sw
   - cd ..
   - export CFLAGS="-ggdb -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer" LDFLAGS="-fsanitize=memory -fPIE -pie -fno-omit-frame-pointer"
-  - clang test.c
+  - clang -I${PREFIX}/include -L${PREFIX}/lib -lssl -lcrypto test.c
   - ./a.out
 
